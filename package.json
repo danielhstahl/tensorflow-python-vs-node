@@ -4,8 +4,13 @@
   "description": "Comparison of python vs node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index",
+    "dep": "wget -O ./external_scripts/data.js https://raw.githubusercontent.com/tensorflow/tfjs-examples/master/mnist-node/data.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^0.3.1"
+  }
 }
