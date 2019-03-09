@@ -1,7 +1,6 @@
 const tf = require('@tensorflow/tfjs-node')
 const data =require('./external_scripts/data')
 const loadData=()=>{
-    //data = new MnistData()
     return data.loadData().then(()=>{
         const train=data.getTrainData()
         const test=data.getTestData()
@@ -10,6 +9,7 @@ const loadData=()=>{
 }
 const IMAGE_H=28
 const IMAGE_W=IMAGE_H
+const convertTensorToMetric=tensor=>tensor.dataSync()[0].toFixed(3)
 const train_model=(xTrain, yTrain)=>{
     const model = tf.sequential()
     model.add(tf.layers.flatten({inputShape: [IMAGE_H, IMAGE_W, 1]}))
@@ -19,6 +19,7 @@ const train_model=(xTrain, yTrain)=>{
     model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics:['accuracy']})
     return model.fit(xTrain, yTrain, {
         epochs: 5,
+        batchSize: 300,
         callbacks: {
             onEpochEnd: (epoch, log) => console.log(`Epoch ${epoch}: loss = ${log.loss}`)
         }
@@ -31,7 +32,9 @@ const train_model=(xTrain, yTrain)=>{
 loadData()
 .then(({xTrain, yTrain, xTest, yTest})=>{
     return train_model(xTrain, yTrain).then(model=>{
-        model.evaluate(xTest, yTest)
+        const eval=model.evaluate(xTest, yTest)
+        const accuracy=convertTensorToMetric(eval[1])
+        console.log(`Accuracy: ${accuracy}`)
     })
 })
 

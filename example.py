@@ -29,7 +29,7 @@ def train_model(x_train, y_train):
         loss='sparse_categorical_crossentropy',
         metrics=['accuracy']
     )
-    model.fit(x_train, y_train, epochs=5)
+    model.fit(x_train, y_train, epochs=5, batch_size=300)
     return model
 
 
@@ -37,4 +37,4 @@ def train_model(x_train, y_train):
 
 model=train_model(x_train, y_train)
 
-model.evaluate(x_test, y_test)
+print(model.evaluate(x_test, y_test))
